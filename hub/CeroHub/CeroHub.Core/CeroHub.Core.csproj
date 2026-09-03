@@ -8,21 +8,17 @@
   </PropertyGroup>
 
   <!--
-    vJoy no tiene paquete NuGet nativo para .NET moderno. Referenciamos
-    directamente el wrapper managed (vJoyInterfaceWrap.dll) del SDK oficial
-    y copiamos la DLL nativa (vJoyInterface.dll) a la salida.
-    Requiere el driver vJoy instalado en el sistema para funcionar.
+    Interfaz vJoy (SDK oficial). Se referencian las DLLs del driver instalado
+    en %ProgramFiles%\vJoy\x64 para garantizar compatibilidad con vjoy.sys.
+    Requiere el driver vJoy instalado (github.com/BrunnerInnovation/vJoy, 2.2.2.0).
   -->
   <ItemGroup>
     <Reference Include="vJoyInterfaceWrap">
-      <HintPath>$(NuGetPackageRoot)vjoyinterface\0.2.1.6\runtimes\win-x64\lib\net20\vJoyInterfaceWrap.dll</HintPath>
+      <HintPath>C:\Program Files\vJoy\x64\vJoyInterfaceWrap.dll</HintPath>
       <Private>true</Private>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="$(NuGetPackageRoot)vjoyinterface\0.2.1.6\runtimes\win-x64\native\vJoyInterface.dll"
-          Link="vJoyInterface.dll" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="C:\Program Files\vJoy\x64\vJoyInterface.dll"
+             Link="vJoyInterface.dll" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

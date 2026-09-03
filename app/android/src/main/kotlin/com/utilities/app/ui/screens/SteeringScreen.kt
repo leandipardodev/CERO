@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.utilities.connection.ConnectionState
 import com.utilities.steering.AndroidSteeringController
+import com.utilities.steering.DeviceOrientation
 import com.utilities.steering.SteeringPayload
 import kotlinx.coroutines.launch
 import kotlin.math.min
@@ -38,6 +39,12 @@ fun SteeringScreen(
     val controller = remember { AndroidSteeringController(context) }
     DisposableEffect(Unit) {
         onDispose { controller.release() }
+    }
+
+    // Inicia los sensores al abrir la pantalla: la orientación se detecta en vivo
+    // aunque el teléfono aún no esté conectado al PC.
+    LaunchedEffect(Unit) {
+        controller.startSensor()
     }
 
     var ip by remember { mutableStateOf("") }
@@ -58,6 +65,9 @@ fun SteeringScreen(
 
     // Último valor del volante leído por el sensor
     val steering by controller.steeringState.collectAsState()
+
+    // Pose / orientación física del dispositivo
+    val deviceOrientation by controller.orientation.collectAsState()
 
     Scaffold(
         topBar = {
@@ -177,6 +187,43 @@ fun SteeringScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             // ── Valores del giroscopio ──────────────────────────────
+            // ── Orientación del dispositivo ─────────────────────────
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.PhoneAndroid,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            "Posición del teléfono",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = orientationLabel(deviceOrientation),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -220,6 +267,19 @@ private fun GyroValue(label: String, value: Float, color: Color) {
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
+    }
+}
+
+@Composable
+private fun orientationLabel(orientation: DeviceOrientation): String {
+    return when (orientation) {
+        DeviceOrientation.UNKNOWN -> "Desconocida"
+        DeviceOrientation.FLAT_BACK -> "Horizontal (pantalla arriba) — modo volante ✓"
+        DeviceOrientation.FLAT_FRONT -> "Horizontal (pantalla abajo)"
+        DeviceOrientation.PORTRAIT -> "Vertical (parado)"
+        DeviceOrientation.UPSIDE_DOWN -> "Vertical (invertido)"
+        DeviceOrientation.LANDSCAPE_LEFT -> "De costado (izquierda)"
+        DeviceOrientation.LANDSCAPE_RIGHT -> "De costado (derecha)"
     }
 }
 
