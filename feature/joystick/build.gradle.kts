@@ -35,10 +35,12 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(project(":core:connection"))
-            implementation(project(":core:shared"))
-            implementation(libs.kotlinx.coroutines.core)
+        val commonMain by getting {
+            dependencies {
+                implementation(project(":core:connection"))
+                implementation(project(":core:shared"))
+                implementation(libs.kotlinx.coroutines.core)
+            }
         }
     }
 }
