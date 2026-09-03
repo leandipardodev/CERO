@@ -29,8 +29,7 @@ public sealed class MessageHandler : IMessageHandler
     {
         try
         {
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var msg = JsonSerializer.Deserialize<IncomingMessage>(json, options);
+            var msg = JsonSerializer.Deserialize<IncomingMessage>(json, JsonDefaults.Options);
             if (msg is null)
                 return;
 
@@ -55,10 +54,12 @@ public sealed class MessageHandler : IMessageHandler
         await Task.CompletedTask;
     }
 
-    private void HandleSteering(string payload)
+    private void HandleSteering(JsonElement? payload)
     {
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var state = JsonSerializer.Deserialize<SteeringState>(payload, options);
+        if (payload is not { } p)
+            return;
+
+        var state = p.Deserialize<SteeringState>(JsonDefaults.Options);
         if (state is null)
             return;
 

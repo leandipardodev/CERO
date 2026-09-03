@@ -79,4 +79,22 @@ CERO/
 5. Server PC (para recibir conexiones)
 6. Permisos y conexión real
 
+## CERO Hub (PC) - App Escritorio C#/.NET 10 WPF
+```
+hub/CeroHub/
+├── CeroHub.slnx
+├── CeroHub.Core/          → Lógica (WebSocket server, vJoy, protocolo)
+└── CeroHub.App/           → UI WPF (estado servidor, IP, vJoy, log)
+```
+- **Servidor WebSocket** propio con TcpListener (no requiere privilegios admin).
+- **vJoy**: wrapper a `vJoyInterfaceWrap.dll` (P/Invoke). Requiere driver vJoy instalado en la PC (github.com/BrunnerInnovation/vJoy).
+- **UI WPF**: botón Iniciar/Detener, muestra IP del PC, estado vJoy, y log de mensajes del celular.
+- **Validado end-to-end**: celular (JSON) → Hub → vJoy funcionando vía WebSocket.
+
+## Volante en el celular (Sesión 13)
+- `feature/steering`: `AndroidSteeringController` lee giroscopio (rotation vector), calcula roll/pitch/yaw y envía a la PC.
+- UI `SteeringScreen`: IP del PC + Conectar, visual del volante, valores en vivo.
+- Formato: `{"type":"Steering","action":"UPDATE","payload":{"roll":...,"pitch":...,"yaw":...}}`.
+- **Para probar el volante**: PC con vJoy instalado + Hub corriendo; celular conectado a la misma WiFi + app.
+
 > ⚠️ **Ojo:** hay una BITACORA.md con el diálogo completo en orden.

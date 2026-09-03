@@ -1,6 +1,20 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CeroHub.Core.Protocol;
+
+public static class JsonDefaults
+{
+    public static readonly JsonSerializerOptions Options = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    static JsonDefaults()
+    {
+        Options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+    }
+}
 
 /// <summary>
 /// Mensajes recibidos desde el celular.
@@ -18,7 +32,7 @@ public enum MessageType
 public record IncomingMessage(
     [property: JsonPropertyName("type")] MessageType Type,
     [property: JsonPropertyName("action")] string Action,
-    [property: JsonPropertyName("payload")] string Payload
+    [property: JsonPropertyName("payload")] JsonElement? Payload
 );
 
 /// <summary>Estado del volante enviado por el celular (giroscopio).</summary>

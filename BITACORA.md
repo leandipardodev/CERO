@@ -130,6 +130,23 @@ Módulos core/features/app con build.gradle.kts (KMP + Android + iOS targets).
 - Compila: 0 errores.
 - **Pendiente:** feature móvil `steering` (leer giroscopio y mandar al Hub), instalar vJoy, joystick/audio/transferencia en Hub.
 
+## [Sesión 13] Volante en el celular + fixes Hub
+
+- Implementado el **volante en el celular** (`feature/steering`):
+  - `AndroidSteeringController`: lee `Sensor.TYPE_ROTATION_VECTOR`, calcula roll/pitch/yaw (ángulos de Euler), actualiza `steeringState` y envía el JSON al Hub por WebSocket.
+  - `SteeringPayload` + `SteeringController.buildMessage()`: formato `{"type":"Steering","action":"UPDATE","payload":{...}}`.
+  - UI `SteeringScreen`: campo IP + botón Conectar/Desconectar, visual de volante (arco con aguja), valores de giróscopo en vivo, estado de conexión.
+- **Bug corregido** en `ConnectionManager`: el interface exponía `Flow<ConnectionState>` pero los implementadores usaban `StateFlow` → cambiado a `StateFlow<ConnectionState>` (la UI usa `collectAsState`).
+- **Bug encontrado y corregido en el Hub**: `System.Text.Json` de .NET por defecto NO deserializa enums desde strings (solo números) → agregado `JsonStringEnumConverter(JsonNamingPolicy.CamelCase)` al `JsonDefaults.Options`. Sin esto, el Hub fallaba al parsear `"type":"Steering"`.
+- **Bug del wrapper vJoy en .NET 10**: el paquete NuGet `vJoyInterface` (net20) no se resolvía en runtime → reemplazado por `<Reference>` directo a `vJoyInterfaceWrap.dll` + copia de la nativa `vJoyInterface.dll` al output (`PlatformTarget x64`). La WPF ahora carga el wrapper sin crashear.
+- **Bug de permisos**: `HttpListener` con `http://*:8080/` requiere ACL http.sys (acceso denegado sin admin) → reemplazado por servidor WebSocket casero con `TcpListener` + handshake + frames (sin privilegios). 
+- **Pruebas validadas**:
+  - Protocolo: parseo de JSON del celular correcto (Steering, Ping, joystick case-insensitive).
+  - WebSocket end-to-end: cliente se conecta, envía JSON, Hub loguea `Volante roll=25`, `Ping recibido`.
+  - WPF arranca sin crashear (vJoy cargado, devuelve "no instalado" con gracia).
+  - App Android + APK debug compilan (BUILD SUCCESSFUL).
+- **Pendiente:** instalar driver vJoy en la PC para que el eje X se mueva, probar en el Samsung A14 vía USB.
+
 ---
 
 ## Estado Actual
