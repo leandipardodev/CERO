@@ -8,12 +8,16 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.UUID
 
-actual class BluetoothConnectionManager : ConnectionManager {
+actual fun createBluetoothConnectionManager(): ConnectionManager {
+    return BluetoothConnectionManager()
+}
+
+class BluetoothConnectionManager : ConnectionManager {
     private val _connectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
-    actual override val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
+    override val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
     
     private val _receivedData = MutableSharedFlow<ByteArray>()
-    actual override val receivedData: Flow<ByteArray> = _receivedData.asSharedFlow()
+    override val receivedData: Flow<ByteArray> = _receivedData.asSharedFlow()
     
     private var socket: BluetoothSocket? = null
     private var inputStream: InputStream? = null
@@ -23,7 +27,7 @@ actual class BluetoothConnectionManager : ConnectionManager {
     private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     
-    actual override suspend fun connect(host: String, port: Int, type: ConnectionType) {
+    override suspend fun connect(host: String, port: Int, type: ConnectionType) {
         try {
             _connectionState.value = ConnectionState.Connecting
             
@@ -45,7 +49,7 @@ actual class BluetoothConnectionManager : ConnectionManager {
         }
     }
     
-    actual override suspend fun disconnect() {
+    override suspend fun disconnect() {
         receiveJob?.cancel()
         inputStream?.close()
         outputStream?.close()
@@ -56,12 +60,12 @@ actual class BluetoothConnectionManager : ConnectionManager {
         _connectionState.value = ConnectionState.Disconnected
     }
     
-    actual override suspend fun send(data: ByteArray) {
+    override suspend fun send(data: ByteArray) {
         outputStream?.write(data)
         outputStream?.flush()
     }
     
-    actual override suspend fun send(data: String) {
+    override suspend fun send(data: String) {
         send(data.toByteArray())
     }
     
