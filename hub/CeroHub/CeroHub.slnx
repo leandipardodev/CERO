@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CeroHub.App/CeroHub.App.csproj" />
+  <Project Path="CeroHub.Core/CeroHub.Core.csproj" />
+</Solution>

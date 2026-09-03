@@ -1,0 +1,54 @@
+﻿<Window x:Class="CeroHub.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CeroHub.App"
+        mc:Ignorable="d"
+        Title="CERO Hub" Height="560" Width="760"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Título -->
+        <TextBlock Grid.Row="0" Text="CERO Hub" FontSize="24" FontWeight="Bold" Margin="0,0,0,8"/>
+
+        <!-- Estado servidor -->
+        <Border Grid.Row="1" Background="#F0F0F0" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Servidor WebSocket" FontWeight="Bold"/>
+                        <TextBlock x:Name="TxtStatus" Text="Detenido" Foreground="#C0392B" FontWeight="Bold" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="TxtAddress" Text="-" Foreground="#555" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="TxtVJoy" Text="vJoy: verificando..." Margin="0,4,0,0" Foreground="#555"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" x:Name="BtnStart" Content="Iniciar" Width="110" Height="34" Click="BtnStart_Click" FontWeight="Bold"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Último volante -->
+        <Border Grid.Row="2" Background="#EAF2FB" CornerRadius="8" Padding="12" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="Volante (giroscopio)" FontWeight="Bold"/>
+                <TextBlock x:Name="TxtSteering" Text="En espera de datos del celular..." Foreground="#555" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Log -->
+        <ListBox Grid.Row="3" x:Name="LogList" Margin="0,0,0,8"/>
+
+        <Button Grid.Row="4" Content="Limpiar log" Click="BtnClear_Click" HorizontalAlignment="Left"/>
+    </Grid>
+</Window>

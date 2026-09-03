@@ -108,6 +108,28 @@ Módulos core/features/app con build.gradle.kts (KMP + Android + iOS targets).
 - `DIALOGUE.md` = resumen corto para hermano (actualizado).
 - `BITACORA.md` = bitácora completa del diálogo (este archivo).
 
+## [Sesión 11] Setup compilación (fixes)
+
+- Error build: agente kotlin hang/no SDK → resuelto.
+- **Versionado correcto final:** Gradle 8.9 + AGP 8.5.2 + Kotlin 2.0 + JDK17.
+- JDK17 instalado (Temurin) en `C:\Program Files\Eclipse Adoptium`.
+- Fix `expect class BluetoothConnectionManager` → patrón `expect fun`/`actual fun`.
+- Iconos Material que faltaban → agregado `material-icons-extended`.
+- Icono launcher creado (adaptive icon).
+- Character `¿` inválido borrado del manifest; permisos/limpieza manifest.
+- Regla: commit+push automático cuando cerca de cuota diaria.
+
+## [Sesión 12] CERO Hub (PC) - App escritorio C#/.NET WPF
+
+- User quería **1 solo software en PC** que sirva para todas las utilidades.
+- **Decisión:** CERO Hub en **C#/.NET 10**, UI **WPF**.
+- Estructura: `hub/CeroHub/` → `CeroHub.Core` (lógica) + `CeroHub.App` (WPF UI).
+- **Core:** Protocol (modelos JSON), VJoyDriver (vJoy P/Invoke, paquete vJoyInterface 0.2.1.6), HubServer (WebSocket puerto 8080), MessageHandler (celular→vJoy).
+- **UI:** estado servidor, IP PC, estado vJoy, log, muestra volante recibido.
+- **vJoy:** driver se instala por separado (BrunnerInnovation fork 2.2.2.0).
+- Compila: 0 errores.
+- **Pendiente:** feature móvil `steering` (leer giroscopio y mandar al Hub), instalar vJoy, joystick/audio/transferencia en Hub.
+
 ---
 
 ## Estado Actual
