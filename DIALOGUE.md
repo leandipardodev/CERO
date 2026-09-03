@@ -5,10 +5,16 @@
 - **Tagline:** "Tu PC, CERO distancia"
 - **Nota:** Verificar marca "CERO" en clase 9 antes de publicar
 
-## Contexto
-- **Proyecto:** App iOS/Android de utilidades para PC
+## Repositorio
+- **GitHub:** https://github.com/leandipardodev/CERO (público)
+- **Ruta local:** `Documentos/proyectos compartido/CERO`
+- **Rama:** master
+
+## Equipo / Herramientas
 - **Stack:** Kotlin Multiplatform
-- **Equipo:** Leand (frontend/iOS) + Hermano (backend/conexiones/Android)
+- **Android Studio:** 2026.1 instalado
+- **Leand:** frontend/UI + iOS (no sabe android aún)
+- **Hermano:** backend/conexiones + Android
 
 ## Utilidades
 1. Transferencia archivos - Bidireccional, WiFi+BT, medianos
@@ -25,11 +31,11 @@
 
 ### Estructura Creada
 ```
-utilities-app/
+CERO/
 ├── app/android/          → App Android (Compose)
 ├── core/
 │   ├── connection/       → Conexiones WiFi/Bluetooth ✅
-│   └── shared/           → Pendiente
+│   └── shared/           → Modelos compartidos ✅
 ├── feature/
 │   ├── filetransfer/     → Pendiente
 │   ├── joystick/         → Pendiente
@@ -66,6 +72,11 @@ utilities-app/
 - Agregada dependencia navigation-compose
 
 ## Próximos Pasos
-1. Empezar features
-2. Server PC (para recibir conexiones)
-3. Permisos y conexión real
+1. Build en Android Studio (Ctrl+F9)
+2. Crear emulador (Device Manager → Pixel 7 → Android 34)
+3. Correr la app
+4. Empezar features
+5. Server PC (para recibir conexiones)
+6. Permisos y conexión real
+
+> ⚠️ **Ojo:** hay una BITACORA.md con el diálogo completo en orden.
